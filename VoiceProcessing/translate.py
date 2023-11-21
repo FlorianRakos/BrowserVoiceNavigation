@@ -12,13 +12,13 @@ recording = sd.rec(int(duration * freq),
 sd.wait()
 
 
-write("./temp/recording.wav", freq, recording)
+write("temp/recording.wav", freq, recording)
 print("Sound captured")
 
 model = whisper.load_model("base")
 
 # load audio and pad/trim it to fit 30 seconds
-audio = whisper.load_audio("./temp/recording.wav")
+audio = whisper.load_audio("temp/recording.wav")
 audio = whisper.pad_or_trim(audio)
 
 # make log-Mel spectrogram and move to the same device as the model
