@@ -1,21 +1,21 @@
 {
-    "manifest_version": 2,
-    "name": "My Test Extension",
-    "version": "1.0",
-    "description": "A test extension to interact with a webpage",
-    "browser_action": {
-      "default_popup": "popup.html",
-      "default_icon": {
-        "16": "images/icon16.png",
-        "48": "images/icon48.png",
-        "128": "images/icon128.png"
-      }
-    },
-    "permissions": ["activeTab", "http://localhost:5000/"],
-    "content_scripts": [
-        {
-          "matches": ["<all_urls>"],
-          "js": ["content.js"]
-        }
-      ]
-  }
+  "manifest_version": 3,
+  "name": "My Test Extension",
+  "version": "1.0",
+  "description": "A test extension to interact with a webpage",
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "images/icon16.png",
+      "48": "images/icon48.png",
+      "128": "images/icon128.png"
+    }
+  },
+  "permissions": ["activeTab", "http://localhost:5000/"],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ]
+}
