@@ -3,6 +3,22 @@ import whisper
 import sounddevice as sd
 from scipy.io.wavfile import write
 import requests
+from flask import Flask, jsonify
+import threading
+
+app = Flask(__name__)
+json_cmd = {}
+@app.route('/get_text', methods=['GET'])
+def get_text():
+    # Replace this with the actual code to get text from the microphone
+    microphone_text = "This is the text from the microphone"
+    #return jsonify({'text': microphone_text})
+    return json_cmd
+
+@app.route('/reset', methods=['GET'])
+def reset():
+    json_cmd = {}
+    return None;
 
 
 def record():
@@ -39,15 +55,17 @@ def translate():
 
     action_words = [["click", "press", "select"], ["scroll"]]
 
-    json_cmd = {
-        "action": "",
-        "element": "",
-    }
+    global json_cmd
+
 
     for group in action_words:
         for word in group:
 
             if word in translation:
+                json_cmd = {
+                    "action": "",
+                    "element": "",
+                }
                 # get the index of the word
                 index = translation.index(word)
                 print("Action word detected at index: " + str(index))
@@ -55,16 +73,22 @@ def translate():
                 json_cmd["action"] = group[0]
                 json_cmd["element"] = translation[index + len(word) + 1 : len(translation) - 1]
                 print(json_cmd)
-                send_cmd(json_cmd)
+                #send_cmd(json_cmd)
                 break
 
 
-def send_cmd(json_cmd):
-    url = "http://localhost:5000/get_text"
-    requests.post(url, json=json_cmd)
+# def send_cmd(json_cmd):
+#     url = "http://localhost:5000/get_text"
+#     requests.post(url, json=json_cmd)
 
+def run_flask():
+    print("Run flask")
+    app.run(port=5000)
 
 def main():
+    flask_thread = threading.Thread(target=run_flask)
+    flask_thread.start()
+
     while True:
         if keyboard.is_pressed('r'):
             record()
