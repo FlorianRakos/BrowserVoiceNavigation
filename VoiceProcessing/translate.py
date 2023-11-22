@@ -2,8 +2,11 @@ import keyboard
 import whisper
 import sounddevice as sd
 from scipy.io.wavfile import write
+import requests
+
 
 def record():
+    print("Recording...")
     freq = 44100
     duration = 5
     recording = sd.rec(int(duration * freq), samplerate=freq, channels=2)
@@ -52,7 +55,14 @@ def translate():
                 json_cmd["action"] = group[0]
                 json_cmd["element"] = translation[index + len(word) + 1 : len(translation) - 1]
                 print(json_cmd)
+                send_cmd(json_cmd)
                 break
+
+
+def send_cmd(json_cmd):
+    url = "http://localhost:5000/get_text"
+    requests.post(url, json=json_cmd)
+
 
 def main():
     while True:
