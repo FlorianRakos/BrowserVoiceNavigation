@@ -11,7 +11,7 @@
         "128": "images/icon128.png"
       }
     },
-    "permissions": ["activeTab", "http://localhost:5000/*"],
+    "permissions": ["activeTab", "http://localhost:5000/get_text", "http://localhost:5000/reset"],
     "content_scripts": [
         {
           "matches": ["<all_urls>"],

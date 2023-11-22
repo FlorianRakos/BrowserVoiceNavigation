@@ -17,8 +17,11 @@ def get_text():
 
 @app.route('/reset', methods=['GET'])
 def reset():
+    print("------ Inside Reset ------")
+    global json_cmd
     json_cmd = {}
-    return None;
+    resp = jsonify(success=True)
+    return resp
 
 
 def record():
