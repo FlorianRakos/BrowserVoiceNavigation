@@ -3,7 +3,6 @@
 console.log("run content.js")
 
 
-
 function fetchData () {
 //console.log('in while')
 
@@ -73,4 +72,4 @@ function scroll(content) {
     }
 }
 
-setInterval(fetchData, 300);
+setInterval(fetchData, 100);
