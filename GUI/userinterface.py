@@ -1,54 +1,74 @@
 import tkinter as tk
-from tkinter import Label, Button, messagebox
+from tkinter import Label, ttk, messagebox
 import threading
 import requests
-
+import keyboard
 
 
 class VoiceProcessingUI:
     def __init__(self, root):
         self.root = root
-        self.root.title("NOT CAPRICONS")
+        self.root.title("BROWSER VOICE NAVIGATION")
         self.root.configure(bg="#f0f0f0")
 
+        # Create a style for consistent button styling
+        self.style = ttk.Style()
+        self.style.configure(
+            "Accent.TButton",
+            font=("Helvetica", 14),
+            background="black",
+            borderwidth=2,
+            relief="raised",
+        )
+
         self.status_label = Label(
-            root, text="NOT CAPRICONS", font=("Helvetica", 30), bg="#f0f0f0"
+            root, text="BROWSER VOICE NAVIGATION", font=("Helvetica", 30), bg="#f0f0f0"
         )
         self.status_label.pack(pady=20)
 
-        self.record_button = Button(
+        self.record_button = ttk.Button(
             root,
             text="Record",
             command=self.record,
-            font=("Helvetica", 22),
-            bg="#4CAF50",
-            fg="white",
+            style="Accent.TButton",
         )
         self.record_button.pack(pady=10)
 
-        self.quit_button = Button(
+        self.reset_button = ttk.Button(
+            root,
+            text="Reset",
+            command=self.reset,
+            style="Accent.TButton",
+        )
+        self.reset_button.pack(pady=10)
+
+        self.quit_button = ttk.Button(
             root,
             text="Quit",
             command=self.quit_app,
-            font=("Helvetica", 22),
-            bg="#2196F3",
-            fg="white",
+            style="Accent.TButton",
         )
         self.quit_button.pack(pady=10)
 
-        self.info_button = Button(
+        self.info_button = ttk.Button(
             root,
             text="Info",
             command=self.show_info,
-            font=("Helvetica", 20),
-            bg="#FFC107",
-            fg="white",
+            style="Accent.TButton",
         )
         self.info_button.pack(pady=10)
 
         # Initialize variables
         self.is_recording = False
         self.translation = ""
+
+        # Start listening for key presses
+        keyboard.on_press_key("s", self.start_recording)
+        if not self.start_recording:
+            self.status_label.config(text="BROWSER VOICE NAVIGATTION")
+        keyboard.on_press_key("r", self.reset)
+        keyboard.on_press_key("q", self.quit_app)
+        keyboard.on_press_key("i", self.info_button)
 
     def record(self):
         if not self.is_recording:
@@ -58,7 +78,7 @@ class VoiceProcessingUI:
         else:
             self.status_label.config(text="Recording already in progress...")
 
-    def start_recording(self):
+    def start_recording(self, _=None):
         requests.get("http://localhost:5000/reset")
         requests.get("http://localhost:5000/record")
 
@@ -75,7 +95,14 @@ class VoiceProcessingUI:
         self.status_label.config(text=f"Action: {self.translation}")
         # Implement logic to execute action based on self.translation
 
-    def quit_app(self):
+        # Stop recording after executing the action
+        self.stop_recording()
+
+    def reset(self, _=None):
+        self.status_label.config(text="Ready")
+        requests.get("http://localhost:5000/reset")
+
+    def quit_app(self, _=None):
         if self.is_recording:
             self.status_label.config(text="Recording in progress. Cannot quit.")
         else:
@@ -85,15 +112,16 @@ class VoiceProcessingUI:
                 self.root.destroy()  
 
     def show_info(self):
-        messagebox.showinfo("Information", "Description on how the application works")
+        messagebox.showinfo("Information", "Description of how the application works")
 
+    def stop_recording(self):
+        self.is_recording = False
 
 def main():
     root = tk.Tk()
     app = VoiceProcessingUI(root)
     root.geometry("800x600")
     root.mainloop()
-
 
 if __name__ == "__main__":
     main()
