@@ -4,6 +4,7 @@ import threading
 import requests
 
 
+
 class VoiceProcessingUI:
     def __init__(self, root):
         self.root = root
@@ -81,7 +82,7 @@ class VoiceProcessingUI:
             user_response = messagebox.askyesno("Quit", "Are you sure you want to quit")
             if user_response:
                 self.status_label.config(text="Quitting...")
-                self.root.destroy()  # Terminate the Tkinter application
+                self.root.destroy()  
 
     def show_info(self):
         messagebox.showinfo("Information", "Description on how the application works")
