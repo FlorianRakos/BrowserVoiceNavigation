@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "name": "My Test Extension",
     "version": "1.0",
-    "description": "A test extension to interact with a webpage",
+    "description": "A extension to interact with a webpage via voice recording.",
     "action": {
       "default_popup": "popup.html",
       "default_icon": {
