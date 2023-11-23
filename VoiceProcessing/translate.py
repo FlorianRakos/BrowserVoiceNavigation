@@ -1,4 +1,5 @@
 import keyboard
+import flask
 import whisper
 import sounddevice as sd
 from scipy.io.wavfile import write
@@ -6,9 +7,11 @@ import requests
 from flask import Flask, jsonify
 import threading
 import logging
-
+from flask import Flask, jsonify
+from flask_cors import CORS  # Import CORS from flask_cors module
 
 app = Flask(__name__)
+CORS(app)
 
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
