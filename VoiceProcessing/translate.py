@@ -5,9 +5,15 @@ from scipy.io.wavfile import write
 import requests
 from flask import Flask, jsonify
 import threading
+import logging
 
 app = Flask(__name__)
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
+
 json_cmd = {}
+record_button = "r"
+quit_button = "q"
 @app.route('/get_text', methods=['GET'])
 def get_text():
     # Replace this with the actual code to get text from the microphone
@@ -29,7 +35,9 @@ def record():
     freq = 44100
     duration = 5
     recording = sd.rec(int(duration * freq), samplerate=freq, channels=2)
-    sd.wait()
+    #sd.wait()
+    while (keyboard.is_pressed(record_button)):
+        continue
 
 
     write("temp/recording.wav", freq, recording)

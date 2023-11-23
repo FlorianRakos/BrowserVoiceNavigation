@@ -73,4 +73,4 @@ function scroll(content) {
     }
 }
 
-setInterval(fetchData, 1000);
+setInterval(fetchData, 300);
