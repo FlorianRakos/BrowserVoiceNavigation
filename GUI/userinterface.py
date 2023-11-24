@@ -65,10 +65,11 @@ class VoiceProcessingUI:
         # Start listening for key presses
         keyboard.on_press_key("s", self.start_recording)
         if not self.start_recording:
-            self.status_label.config(text="BROWSER VOICE NAVIGATTION")
+            self.status_label.config(text="Recording...")
+       
         keyboard.on_press_key("r", self.reset)
         keyboard.on_press_key("q", self.quit_app)
-        keyboard.on_press_key("i", self.info_button)
+        keyboard.on_press_key("i", self.show_info)
 
     def record(self):
         if not self.is_recording:
@@ -111,8 +112,8 @@ class VoiceProcessingUI:
                 self.status_label.config(text="Quitting...")
                 self.root.destroy()  
 
-    def show_info(self):
-        messagebox.showinfo("Information", "Description of how the application works")
+    def show_info(self, _=None):
+        messagebox.showinfo("Information", "It's up to you to use the keyboard or clicks")
 
     def stop_recording(self):
         self.is_recording = False
@@ -125,3 +126,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+#  if not self.start_recording:
+           # self.status_label.config(text="BROWSER VOICE NAVIGATTION")
