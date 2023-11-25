@@ -37,7 +37,7 @@ def reset():
 def record():
     print("Recording...")
     freq = 44100
-    duration = 5
+    duration = 10
     recording = sd.rec(int(duration * freq), samplerate=freq, channels=2)
     #sd.wait()
 
@@ -48,9 +48,9 @@ def record():
     write("temp/recording.wav", freq, recording)
     print("Sound captured")
 
-def translate():
+def translate(model):
 
-    model = whisper.load_model("base")
+
 
     # load audio and pad/trim it to fit 30 seconds
     audio = whisper.load_audio("temp/recording.wav")
@@ -67,7 +67,7 @@ def translate():
     options = whisper.DecodingOptions(fp16 = False)
     result = whisper.decode(model, mel, options)
     translation = result.text.lower()
-    print(translation)
+    print("Translation: " + translation)
 
     action_words = [["click", "press", "select"], ["scroll"]]
 
@@ -104,11 +104,12 @@ def run_flask():
 def main():
     flask_thread = threading.Thread(target=run_flask)
     flask_thread.start()
+    model = whisper.load_model("base")
 
     while True:
         if keyboard.is_pressed('r'):
             record()
-            translate()
+            translate(model)
         if keyboard.is_pressed('q'):
             break
 
