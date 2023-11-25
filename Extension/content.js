@@ -1,17 +1,12 @@
-// content.js
-
-console.log("run content.js")
-
+console.log("Running content.js")
 
 function fetchData () {
-//console.log('in while')
 
     fetch('http://localhost:5000/get_text')
         .then(response => response.json())
         .then(data => {
             // Update the input field with the received text
             if (data.action != null) {
-                //console.log(data.action)
                 pressLink(data.action, data.element)
             }
         })
@@ -19,7 +14,6 @@ function fetchData () {
 }
 
 function pressLink (action, content) {
-        // Find the button with the specified text
     switch (action) {
         case "click":
             console.log("Try click on: " + content)

@@ -23,14 +23,11 @@ quit_button = "q"
 
 @app.route('/get_text', methods=['GET'])
 def get_text():
-    # Replace this with the actual code to get text from the microphone
-    microphone_text = "This is the text from the microphone"
-    #return jsonify({'text': microphone_text})
     return json_cmd
 
 @app.route('/reset', methods=['GET'])
 def reset():
-    print("------ Inside Reset ------")
+    print("------ Reset ------")
     global json_cmd
     json_cmd = {}
     resp = jsonify(success=True)
@@ -47,13 +44,10 @@ def record():
     while (keyboard.is_pressed(record_button)):
         continue
 
-
     write("temp/recording.wav", freq, recording)
     print("Sound captured")
 
 def translate(model):
-
-
 
     # load audio and pad/trim it to fit 30 seconds
     audio = whisper.load_audio("temp/recording.wav")
@@ -76,7 +70,6 @@ def translate(model):
 
     global json_cmd
 
-
     for group in action_words:
         for word in group:
 
@@ -92,13 +85,8 @@ def translate(model):
                 json_cmd["action"] = group[0]
                 json_cmd["element"] = translation[index + len(word) + 1 : len(translation) - 1]
                 print(json_cmd)
-                #send_cmd(json_cmd)
                 break
 
-
-# def send_cmd(json_cmd):
-#     url = "http://localhost:5000/get_text"
-#     requests.post(url, json=json_cmd)
 
 def run_flask():
     print("Run flask")
