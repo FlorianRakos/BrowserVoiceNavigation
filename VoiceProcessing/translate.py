@@ -8,10 +8,10 @@ from flask import Flask, jsonify
 import threading
 import logging
 from flask import Flask, jsonify
-from flask_cors import CORS  # Import CORS from flask_cors module
+#from flask_cors import CORS  # Import CORS from flask_cors module
 
 app = Flask(__name__)
-CORS(app)
+#CORS(app)
 
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
@@ -90,7 +90,8 @@ def translate(model):
 
 def run_flask():
     print("Run flask")
-    app.run(port=5000)
+    context = ('./ssh/cert.pem', './ssh/key.pem')
+    app.run(port=5000, ssl_context=context)
 
 def main():
     flask_thread = threading.Thread(target=run_flask)
