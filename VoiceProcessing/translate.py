@@ -8,10 +8,17 @@ from flask import Flask, jsonify
 import threading
 import logging
 from flask import Flask, jsonify
-#from flask_cors import CORS  # Import CORS from flask_cors module
+import argparse
+import psutil
+import os
+
+# implement argument for keycode
+parser = argparse.ArgumentParser()
+parser.add_argument("--key", help="access key")
+args = parser.parse_args()
+secKey = "TEM8S2-2ET83-CGKP1-DPSI2-EPZO1"
 
 app = Flask(__name__)
-#CORS(app)
 
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
@@ -44,13 +51,13 @@ def record():
     while (keyboard.is_pressed(record_button)):
         continue
 
-    write("temp/recording.wav", freq, recording)
+    write("dist/temp/recording.wav", freq, recording)
     print("Sound captured")
 
 def translate(model):
 
     # load audio and pad/trim it to fit 30 seconds
-    audio = whisper.load_audio("temp/recording.wav")
+    audio = whisper.load_audio("dist/temp/recording.wav")
     audio = whisper.pad_or_trim(audio)
 
     # make log-Mel spectrogram and move to the same device as the model
@@ -89,11 +96,18 @@ def translate(model):
 
 
 def run_flask():
-    print("Run flask")
+    print("Run flask server")
     context = ('./ssh/cert.pem', './ssh/key.pem')
     app.run(port=5000, ssl_context=context)
 
 def main():
+    current_process = psutil.Process(os.getpid())
+    parent_process = current_process.parent()
+    print(parent_process)
+    if (args.key != secKey):
+        print("Invalid license!")
+        exit()
+    
     flask_thread = threading.Thread(target=run_flask)
     flask_thread.start()
     model = whisper.load_model("base")
@@ -103,7 +117,8 @@ def main():
             record()
             translate(model)
         if keyboard.is_pressed('q'):
-            break
+            print("Exit program")
+            exit()
 
 
 if __name__ == "__main__":
